@@ -495,6 +495,13 @@ static NSString *const playbackRate = @"rate";
 
 - (void)setMuted:(BOOL)muted
 {
+  NSString *sessionCategory = muted ? AVAudioSessionCategoryAmbient : AVAudioSessionCategoryPlayback;
+  NSError *error;
+  [[AVAudioSession sharedInstance] setCategory:sessionCategory error:&error];
+  if (error) {
+    NSLog(@"Encountered error when trying to set audio session category: %@", error.localizedDescription);
+  }
+
   _muted = muted;
   [self applyModifiers];
 }
